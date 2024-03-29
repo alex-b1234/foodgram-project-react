@@ -1,12 +1,11 @@
 import base64
-import datetime as dt
 
 from django.core.files.base import ContentFile
 from rest_framework import serializers
 from rest_framework.relations import SlugRelatedField
 from rest_framework.validators import UniqueTogetherValidator
 
-from .models import Recipe, Favorite, Subscribe, User
+from .models import Recipe, Favorite, Subscribtion, User, Tag, RecipeTag
 
 
 class Base64ImageField(serializers.ImageField):
@@ -51,8 +50,27 @@ class RecipeSerializer(serializers.ModelSerializer):
             return True
         return False
 
+    def create(self, validated_data):
+        ingredients = validated_data.pop('ingredients')
+        recipe = Recipe.objects.create(**validated_data)
+        for ingredient in ingredients:
+            current_ingredient, status = ingredients.objects.get_or_create(
+                **ingredient
+            )
+            RecipeTag.objects.create(
+                achievement=current_ingredient, recipe=recipe
+            )
+        return recipe
 
-class SubscribeSerializer(serializers.ModelSerializer):
+
+class TagSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        field = ('name', 'color', 'slug')
+        model = Tag
+
+
+class SubscribtiionSerializer(serializers.ModelSerializer):
     user = SlugRelatedField(
         slug_field='username',
         read_only=True,
@@ -65,10 +83,10 @@ class SubscribeSerializer(serializers.ModelSerializer):
 
     class Meta:
         fields = ('user', 'subscribing')
-        model = Subscribe
+        model = Subscribtion
         validators = [
             UniqueTogetherValidator(
-                queryset=Subscribe.objects.all(),
+                queryset=Subscribtion.objects.all(),
                 fields=('user', 'subscribing'),
                 message='Уже подписаны'
             )

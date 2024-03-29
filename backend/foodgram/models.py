@@ -12,8 +12,6 @@ class Tag(models.Model):
 
 class Ingredient(models.Model):
     name = models.CharField(max_length=50)
-    amount = models.IntegerField()
-    measurement_unit = models.CharField(max_length=20)
 
 
 class Recipe(models.Model):
@@ -22,7 +20,6 @@ class Recipe(models.Model):
     ingredients = models.ManyToManyField(
         Ingredient,
         through='RecipeIngredient',
-        through_fields=('recipe', 'ingredient')
     )
     tags = models.ManyToManyField(Tag)
     cooking_time = models.PositiveIntegerField()
@@ -37,6 +34,18 @@ class Recipe(models.Model):
     )
 
 
+class RecipeIngredient(models.Model):
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
+    amount = models.IntegerField()
+    measurement_unit = models.CharField(max_length=20)
+
+
+class RecipeTag(models.Model):
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    tags = models.ForeignKey(Tag, on_delete=models.CASCADE)
+
+
 class Favorite(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.CASCADE
@@ -46,8 +55,8 @@ class Favorite(models.Model):
     )
 
 
-class Subscribe(models.Model):
+class Subscribtion(models.Model):
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE)
+        User, on_delete=models.CASCADE, related_name='user')
     subscribing = models.ForeignKey(
-        User, on_delete=models.CASCADE)
+        User, on_delete=models.CASCADE, related_name='subscribing')
