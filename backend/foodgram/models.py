@@ -55,7 +55,7 @@ class Recipe(models.Model):
         related_name='recipes',
         verbose_name='Автор'
     )
-    slug = models.SlugField(verbose_name='Слаг')
+    is_favorite = models.BooleanField(null = True, blank = True)
     image = models.ImageField(
         upload_to='foodgram/images/',
         null=True,

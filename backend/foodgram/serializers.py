@@ -1,12 +1,19 @@
 import base64
 
 from django.core.files.base import ContentFile
+from djoser.serializers import UserCreateSerializer
 from rest_framework import serializers
 from rest_framework.relations import SlugRelatedField
 from rest_framework.validators import UniqueTogetherValidator
 
 from .models import (Recipe, Subscribtion, User, Ingredient,
                      Tag, RecipeTag, RecipeIngredient)
+
+
+class CustomUserSerializer(UserCreateSerializer):
+
+    class Meta(UserCreateSerializer.Meta):
+        fields = ('email', 'last_name',  'first_name', 'username', 'password',)
 
 
 class Base64ImageField(serializers.ImageField):
@@ -53,7 +60,6 @@ class IngredientSerializer(serializers.ModelSerializer):
 
 class RecipeListSerializer(serializers.ModelSerializer):
     ingredients = serializers.SerializerMethodField()
-    is_favorite = serializers.BooleanField()
     author = serializers.SlugRelatedField(slug_field='username',
                                           read_only=True)
 
@@ -61,6 +67,10 @@ class RecipeListSerializer(serializers.ModelSerializer):
         return RecipeIngredientSerializer(
             RecipeIngredient.objects.filter(recipe=obj).all(), many=True
         ).data
+
+    def get_is_favorite(self, obj):
+        user = self.context.get('request').user
+        return obj.favorites.filter(user=user).exists()
 
     def get_image_url(self, obj):
         if obj.image:
@@ -70,7 +80,7 @@ class RecipeListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
         fields = ('name', 'ingredients', 'is_favorite', 'image',
-                  'text', 'author', 'tags')
+                  'text', 'author', 'tags', 'cooking_time')
 
 
 class IngredientCreateInRecipeSerializer(serializers.ModelSerializer):
@@ -88,10 +98,22 @@ class IngredientCreateInRecipeSerializer(serializers.ModelSerializer):
 
 class RecipeCreateUpdateSerializer(serializers.ModelSerializer):
     ingredients = IngredientCreateInRecipeSerializer(many=True)
+    image = Base64ImageField(required=False, allow_null=True)
+    image_url = serializers.SerializerMethodField(
+        'get_image_url',
+        read_only=True,
+    )
 
     class Meta:
         model = Recipe
-        fields = ('name', 'ingredients', 'text', )
+        fields = ('name', 'ingredients', 'image', 'image_url',
+                  'text', 'author', 'tags', 'cooking_time',)
+        read_only_fields = ('author',)
+
+    def get_image_url(self, obj):
+        if obj.image:
+            return obj.image.url
+        return None
 
     def validate_ingredients(self, value):
         if len(value) < 1:

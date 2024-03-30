@@ -44,6 +44,7 @@ class TagViewSet(viewsets.ModelViewSet):
 class IngredientViewSet(viewsets.ModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
+    search_fields = ('name',)
 
 
 class SubscribtionViewSet(viewsets.GenericViewSet, mixins.ListModelMixin,
