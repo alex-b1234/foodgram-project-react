@@ -44,13 +44,6 @@ class RecipeIngredientSerializer(serializers.ModelSerializer):
         model = RecipeIngredient
 
 
-class RecipeTagSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        fields = ('recipe', 'tags')
-        model = RecipeTag
-
-
 class IngredientSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -124,6 +117,7 @@ class RecipeCreateUpdateSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         ingredients = validated_data.pop('ingredients')
+        tags = validated_data.pop('tags')
         recipe = Recipe.objects.create(**validated_data)
 
         create_ingredients = [
@@ -134,8 +128,18 @@ class RecipeCreateUpdateSerializer(serializers.ModelSerializer):
             )
             for ingredient in ingredients
         ]
+        create_tags = [
+            RecipeTag(
+                recipe=recipe,
+                tags=tag['tag'],
+            )
+            for tag in tags
+        ]
         RecipeIngredient.objects.bulk_create(
             create_ingredients
+        )
+        RecipeTag.objects.bulk_create(
+            create_tags
         )
         return recipe
 
