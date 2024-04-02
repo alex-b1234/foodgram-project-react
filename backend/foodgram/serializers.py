@@ -31,23 +31,6 @@ class CustomUserSerializer(UserCreateSerializer):
         return User.objects.create_user(**validated_data)
 
 
-class RecipeIngredientSerializer(serializers.ModelSerializer):
-    name = serializers.StringRelatedField(
-        source='ingredient.name'
-    )
-    measurement_unit = serializers.StringRelatedField(
-        source='ingredient.measurement_unit'
-    )
-    id = serializers.PrimaryKeyRelatedField(
-        source='ingredient',
-        queryset=Ingredient.objects.all()
-    )
-
-    class Meta:
-        fields = ('amount', 'name', 'measurement_unit', 'id')
-        model = RecipeIngredient
-
-
 class IngredientSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -62,6 +45,22 @@ class TagSerializer(serializers.ModelSerializer):
         model = Tag
 
 
+class RecipeIngredientSerializer(serializers.ModelSerializer):
+    id = serializers.ReadOnlyField(
+        source='ingredient.id'
+        )
+    name = serializers.ReadOnlyField(
+        source='ingredient.name'
+        )
+    measurement_unit = serializers.ReadOnlyField(
+        source='ingredient.measurement_unit'
+        )
+
+    class Meta:
+        model = RecipeIngredient
+        fields = ('id', 'name', 'measurement_unit', 'amount')
+
+
 class RecipeSerializer(serializers.ModelSerializer):
     tags = TagSerializer(read_only=True, many=True)
     author = CustomUserSerializer(read_only=True)
@@ -72,7 +71,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recipe
-        fields = ('tags', 'author', 'ingredients', 'is_favorited',
+        fields = ('id', 'tags', 'author', 'ingredients', 'is_favorited',
                   'is_in_shopping_cart', 'name', 'image',
                   'text', 'cooking_time'
                   )
@@ -121,17 +120,6 @@ class CartSerializer(serializers.ModelSerializer):
             instance=instance.recipe,
             context={'request': self.context.get('request')}
         ).data
-
-
-class RecipeIngredientSerializer(serializers.ModelSerializer):
-    id = serializers.ReadOnlyField(source='ingredient.id')
-    name = serializers.ReadOnlyField(source='ingredient.name')
-    measurement_unit = serializers.ReadOnlyField(
-        source='ingredient.measurement_unit')
-
-    class Meta:
-        model = RecipeIngredient
-        fields = ('id', 'name', 'measurement_unit', 'amount')
 
 
 class SubscriptionSerializer(serializers.ModelSerializer):
