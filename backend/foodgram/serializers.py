@@ -99,6 +99,7 @@ class SubRecipeSerializer:
 
 
 class FavoriteSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Favorite
         fields = ('user', 'recipe')
@@ -111,6 +112,7 @@ class FavoriteSerializer(serializers.ModelSerializer):
 
 
 class CartSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Cart
         fields = ('user', 'recipe')
