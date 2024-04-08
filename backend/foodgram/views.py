@@ -105,6 +105,8 @@ class SubscribtionViewSet(viewsets.GenericViewSet, mixins.ListModelMixin,
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
+    http_method_names = ('get', 'post', 'patch', 'delete',
+                         'head', 'options', 'trace')
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
     pagination_class = CustomPagination

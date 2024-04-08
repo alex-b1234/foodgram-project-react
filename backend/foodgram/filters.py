@@ -27,7 +27,7 @@ class RecipeFilter(django_filters.FilterSet):
     def get_favorited(self, queryset, name, value):
         queryset.add_user_annotations(self.request.user.id)
         if value and self.request.user.is_authenticated:
-            return queryset.filter(favorited__user=self.request.user)
+            return queryset.filter(favorites__user=self.request.user)
         return queryset
 
     def get_in_shopping_cart(self, queryset, name, value):
