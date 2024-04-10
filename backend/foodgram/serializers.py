@@ -47,13 +47,13 @@ class TagSerializer(serializers.ModelSerializer):
 
 class RecipeIngredientSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField(
-        source='ingredient_id'
+        source='ingredient.id'
         )
     name = serializers.ReadOnlyField(
-        source='ingredient_name'
+        source='ingredient.name'
         )
     measurement_unit = serializers.ReadOnlyField(
-        source='ingredient_measurement_unit'
+        source='ingredient.measurement_unit'
         )
 
     class Meta:
@@ -64,8 +64,8 @@ class RecipeIngredientSerializer(serializers.ModelSerializer):
 class RecipeSerializer(serializers.ModelSerializer):
     tags = TagSerializer(read_only=True, many=True)
     author = CustomUserSerializer(read_only=True)
-    ingredients = RecipeIngredientSerializer(
-        read_only=True, many=True, source='recipe_ingredients')
+    ingredients = RecipeIngredientSerializer(read_only=True, many=True,
+                                             source='recipe_ingredients')
     is_favorited = serializers.SerializerMethodField()
     is_in_shopping_cart = serializers.SerializerMethodField()
 
@@ -73,8 +73,7 @@ class RecipeSerializer(serializers.ModelSerializer):
         model = Recipe
         fields = ('id', 'tags', 'author', 'ingredients', 'is_favorited',
                   'is_in_shopping_cart', 'name', 'image',
-                  'text', 'cooking_time'
-                  )
+                  'text', 'cooking_time')
 
     def get_is_favorited(self, obj):
         request = self.context.get('request')
