@@ -65,6 +65,7 @@ class RecipeIngredientSerializer(serializers.ModelSerializer):
 class RecipeSerializer(serializers.ModelSerializer):
     tags = TagSerializer(read_only=True, many=True)
     author = CustomUserSerializer(read_only=True)
+    print('AAAAAAAAAAAAAAAAAAA')
     ingredients = RecipeIngredientSerializer(
         read_only=True, many=True, source='recipe_ingredients')
     is_favorited = serializers.SerializerMethodField()
