@@ -49,6 +49,7 @@ class RecipeIngredientSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField(
         source='ingredient.id'
         )
+    print('AAAAAAAAAAAAAAAAAAA')
     name = serializers.ReadOnlyField(
         source='ingredient.name'
         )
