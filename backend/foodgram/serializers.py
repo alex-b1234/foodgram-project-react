@@ -47,25 +47,23 @@ class TagSerializer(serializers.ModelSerializer):
 
 class RecipeIngredientSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField(
-        source='ingredient.id'
+        source='ingredient_id'
         )
-    print('AAAAAAAAAAAAAAAAAAA')
     name = serializers.ReadOnlyField(
-        source='ingredient.name'
+        source='ingredient_name'
         )
     measurement_unit = serializers.ReadOnlyField(
-        source='ingredient.measurement_unit'
+        source='ingredient_measurement_unit'
         )
 
     class Meta:
         model = RecipeIngredient
-        fields = ('id', 'name', 'measurement_unit', 'amount', 'ingredient_id')
+        fields = ('id', 'name', 'measurement_unit', 'amount')
 
 
 class RecipeSerializer(serializers.ModelSerializer):
     tags = TagSerializer(read_only=True, many=True)
     author = CustomUserSerializer(read_only=True)
-    print('AAAAAAAAAAAAAAAAAAA')
     ingredients = RecipeIngredientSerializer(
         read_only=True, many=True, source='recipe_ingredients')
     is_favorited = serializers.SerializerMethodField()
