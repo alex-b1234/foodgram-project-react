@@ -1,6 +1,7 @@
 from djoser.serializers import UserCreateSerializer
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
+import logging
 
 from .models import (Recipe, Follow, User, Ingredient, Favorite,
                      Tag, RecipeTag, RecipeIngredient, Cart)
@@ -52,6 +53,7 @@ class RecipeIngredientSerializer(serializers.ModelSerializer):
     name = serializers.ReadOnlyField(
         source='ingredient.name'
         )
+    logging.warning('рецепт ингредиент')
     measurement_unit = serializers.ReadOnlyField(
         source='ingredient.measurement_unit'
         )
@@ -68,9 +70,11 @@ class RecipeSerializer(serializers.ModelSerializer):
                                              source='recipe_ingredients')
     is_favorited = serializers.SerializerMethodField()
     is_in_shopping_cart = serializers.SerializerMethodField()
+    logging.warning('рецепт')
 
     class Meta:
         model = Recipe
+        logging.warning('мета рецепта')
         fields = ('id', 'tags', 'author', 'ingredients', 'is_favorited',
                   'is_in_shopping_cart', 'name', 'image',
                   'text', 'cooking_time')
