@@ -13,7 +13,7 @@ class CustomUserSerializer(UserCreateSerializer):
     is_subscribed = serializers.SerializerMethodField(read_only=True)
 
     class Meta(UserCreateSerializer.Meta):
-        fields = ('email', 'last_name',  'is_subscribed',
+        fields = ('email', 'last_name', 'is_subscribed',
                   'first_name', 'username', 'password',)
         extra_kwargs = {
             'password': {'write_only': True},
@@ -48,10 +48,10 @@ class TagSerializer(serializers.ModelSerializer):
 class RecipeIngredientSerializer(serializers.ModelSerializer):
     name = serializers.ReadOnlyField(
         source='ingredient.name'
-        )
+    )
     measurement_unit = serializers.ReadOnlyField(
         source='ingredient.measurement_unit'
-        )
+    )
 
     class Meta:
         model = RecipeIngredient
