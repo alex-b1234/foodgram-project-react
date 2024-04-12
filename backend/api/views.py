@@ -33,13 +33,9 @@ class CustomUserViewSet(UserViewSet):
     http_method_names = ('get', 'post', 'delete',)
     pagination_class = CustomPagination
 
-    #@action(methods=['get'], detail=False)
-    #def me(self, request, *args, **kwargs):
-    #    return super().me(request, *args, **kwargs)
-
     @action(
         methods=('get',),
-        detail=False,
+        #detail=False,
         permission_classes=[IsAuthenticated],
         pagination_class=CustomPagination
     )

@@ -160,9 +160,6 @@ class FollowSerializer(serializers.ModelSerializer):
                 {'errors': 'Вы не можете подписаться на себя.'})
         return data
 
-    #def create(self, validated_data):
-    #    return Follow.objects.create(**validated_data)
-
     def to_representation(self, instance):
         return SubscriptionSerializer(
             instance=instance.following,
