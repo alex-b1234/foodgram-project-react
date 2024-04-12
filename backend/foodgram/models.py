@@ -7,21 +7,25 @@ User = get_user_model()
 
 
 class Tag(models.Model):
-    name = models.CharField(max_length=200, blank=False,
-                            unique=True, db_index=True
-                            )
+    name = models.CharField(
+        max_length=200,
+        blank=False,
+        unique=True,
+        db_index=True,
+        verbose_name='Название'
+    )
     color = models.CharField(
-        max_length=10, unique=True
+        max_length=10, unique=True, verbose_name='Цвет'
     )
     slug = models.SlugField(
-        max_length=200, null=True, unique=True
+        max_length=200, unique=True, verbose_name='Слаг'
     )
 
 
 class Ingredient(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, verbose_name='Название')
     measurement_unit = models.CharField(
-        max_length=200
+        max_length=200, verbose_name='Единица измерения'
     )
 
     def __str__(self):
@@ -29,6 +33,7 @@ class Ingredient(models.Model):
 
 
 class RecipeQuerySet(models.QuerySet):
+
     def add_user_annotations(self, user_id: Optional[int]):
         return self.annotate(
             in_shopping_cart=models.Exists(
@@ -71,10 +76,10 @@ class Recipe(models.Model):
     objects = RecipeQuerySet.as_manager()
 
     class Meta:
-        ordering = ('-pub_date', )
+        ordering = ('-pub_date',)
         constraints = [
             models.UniqueConstraint(
-                fields=['author', 'name'],
+                fields=('author', 'name'),
                 name='unique_author_recipe'
             ),
         ]

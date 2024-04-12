@@ -9,17 +9,18 @@ from django.shortcuts import get_object_or_404
 from django.http import Http404, HttpResponse
 from django.db.models import Sum
 from djoser.views import UserViewSet
+from django.contrib.auth import get_user_model
 
 from .permissions import IsAuthorOrReadOnly
 from .filters import IngredientFilter, RecipeFilter
-from .models import (Recipe, Follow, Tag, Ingredient, User, RecipeIngredient,
-                     Favorite, Cart)
+from foodgram.models import (Recipe, Follow, Tag, Ingredient, RecipeIngredient,
+                             Favorite, Cart)
 from .serializers import (SubscriptionSerializer, TagSerializer,
                           IngredientSerializer, FollowSerializer,
                           RecipeSerializer, CreateRecipeSerializer,
                           FavoriteSerializer, CartSerializer)
 
-
+User = get_user_model()
 DEFAULT_PAGE_SIZE = 10
 
 
@@ -32,12 +33,12 @@ class CustomUserViewSet(UserViewSet):
     http_method_names = ('get', 'post', 'delete',)
     pagination_class = CustomPagination
 
-    @action(methods=['get'], detail=False)
-    def me(self, request, *args, **kwargs):
-        return super().me(request, *args, **kwargs)
+    #@action(methods=['get'], detail=False)
+    #def me(self, request, *args, **kwargs):
+    #    return super().me(request, *args, **kwargs)
 
     @action(
-        methods=['get'],
+        methods=('get',),
         detail=False,
         permission_classes=[IsAuthenticated],
         pagination_class=CustomPagination
@@ -97,8 +98,7 @@ class SubscribtionViewSet(viewsets.GenericViewSet, mixins.ListModelMixin,
     search_fields = ('subscribing__username',)
 
     def get_queryset(self):
-        queryset = Follow.objects.filter(user=self.request.user)
-        return queryset
+        return Follow.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)

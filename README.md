@@ -1,4 +1,4 @@
-# Kittygram
+# Foodgram
 
 ![](https://github.com/alex-b1234/foodgram-project-react/actions/workflows/main.yml/badge.svg)
 

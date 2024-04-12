@@ -1,11 +1,12 @@
 from djoser.serializers import UserCreateSerializer
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
+from django.contrib.auth import get_user_model
 
-from .models import (Recipe, Follow, User, Ingredient, Favorite,
-                     Tag, RecipeTag, RecipeIngredient, Cart)
+from foodgram.models import (Recipe, Follow, Ingredient, Favorite,
+                             Tag, RecipeTag, RecipeIngredient, Cart)
 
-
+User = get_user_model()
 DEFAULT_PAGE_SIZE = 10
 
 
@@ -21,7 +22,7 @@ class CustomUserSerializer(UserCreateSerializer):
         }
 
     def get_is_subscribed(self, obj):
-        request = self.context.get("request")
+        request = self.context.get('request')
         if request.user.is_anonymous:
             return False
         return Follow.objects.filter(
@@ -159,8 +160,8 @@ class FollowSerializer(serializers.ModelSerializer):
                 {'errors': 'Вы не можете подписаться на себя.'})
         return data
 
-    def create(self, validated_data):
-        return Follow.objects.create(**validated_data)
+    #def create(self, validated_data):
+    #    return Follow.objects.create(**validated_data)
 
     def to_representation(self, instance):
         return SubscriptionSerializer(
@@ -170,7 +171,6 @@ class FollowSerializer(serializers.ModelSerializer):
 
 
 class CreateRecipeIngredientSerializer(RecipeIngredientSerializer):
-    id = serializers.PrimaryKeyRelatedField(queryset=Ingredient.objects.all())
 
     class Meta:
         model = RecipeIngredient
