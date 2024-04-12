@@ -1,8 +1,8 @@
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
-from foodgram.views import (RecipeViewSet, TagViewSet,
-                            IngredientViewSet, CustomUserViewSet)
+from api.views import (RecipeViewSet, TagViewSet,
+                       IngredientViewSet, CustomUserViewSet)
 
 router = routers.DefaultRouter()
 router.register('users', CustomUserViewSet, basename='users')
