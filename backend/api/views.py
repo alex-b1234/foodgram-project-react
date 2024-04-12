@@ -35,8 +35,8 @@ class CustomUserViewSet(UserViewSet):
 
     @action(
         methods=('get',),
-        #detail=False,
-        permission_classes=[IsAuthenticated],
+        detail=False,
+        permission_classes=(IsAuthenticated,),
         pagination_class=CustomPagination
     )
     def subscriptions(self, request, *args, **kwargs):
