@@ -35,10 +35,6 @@ class CustomUserViewSet(UserViewSet):
     pagination_class = CustomPagination
     serializer_class = CustomUserSerializer
 
-    @action(methods=['get'], detail=False)
-    def me(self, request, *args, **kwargs):
-        return super().me(request, *args, **kwargs)
-
     @action(
         methods=('get',),
         detail=False,
