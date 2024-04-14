@@ -1,4 +1,4 @@
-from rest_framework import viewsets, mixins, permissions, filters, status
+from rest_framework import viewsets, status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated, SAFE_METHODS
 from rest_framework.decorators import action
@@ -32,6 +32,7 @@ class CustomPagination(PageNumberPagination):
 
 class CustomUserViewSet(UserViewSet):
     http_method_names = ('get', 'post', 'delete',)
+    queryset = User.objects.all()
     pagination_class = CustomPagination
     serializer_class = CustomUserSerializer
 
