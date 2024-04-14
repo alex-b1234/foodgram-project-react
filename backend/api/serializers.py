@@ -14,7 +14,7 @@ class CustomUserSerializer(UserSerializer):
     is_subscribed = serializers.SerializerMethodField(read_only=True)
 
     class Meta(UserSerializer.Meta):
-        model = User
+        #model = User
         fields = ('id', 'email', 'last_name', 'is_subscribed',
                   'first_name', 'username', 'password',)
         extra_kwargs = {
