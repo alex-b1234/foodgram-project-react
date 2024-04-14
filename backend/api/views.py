@@ -18,8 +18,7 @@ from foodgram.models import (Recipe, Follow, Tag, Ingredient, RecipeIngredient,
 from .serializers import (SubscriptionSerializer, TagSerializer,
                           IngredientSerializer, FollowSerializer,
                           RecipeSerializer, CreateRecipeSerializer,
-                          FavoriteSerializer, CartSerializer,
-                          CustomUserSerializer)
+                          FavoriteSerializer, CartSerializer,)
 
 User = get_user_model()
 DEFAULT_PAGE_SIZE = 10
@@ -32,9 +31,7 @@ class CustomPagination(PageNumberPagination):
 
 class CustomUserViewSet(UserViewSet):
     http_method_names = ('get', 'post', 'delete',)
-    #queryset = User.objects.all()
     pagination_class = CustomPagination
-    #serializer_class = CustomUserSerializer
 
     @action(
         methods=('get',),
