@@ -122,14 +122,14 @@ class CartSerializer(serializers.ModelSerializer):
         ).data
 
 
-class SubscriptionSerializer(serializers.ModelSerializer):
+class SubscriptionSerializer(CustomUserSerializer):
     recipes = serializers.SerializerMethodField()
     recipes_count = serializers.SerializerMethodField()
 
     class Meta:
         model = User
         fields = ('email', 'id', 'username', 'first_name', 'last_name',
-                  'recipes', 'recipes_count')
+                  'is_subscribed', 'recipes', 'recipes_count')
 
     def get_recipes(self, obj):
         recipes_limit = self.context.get('request').query_params.get(
