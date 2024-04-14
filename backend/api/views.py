@@ -76,6 +76,9 @@ class CustomUserViewSet(UserViewSet):
             status=status.HTTP_204_NO_CONTENT
         )
 
+    def perform_create(self, serializer):
+        serializer.save()
+
 
 class TagViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
