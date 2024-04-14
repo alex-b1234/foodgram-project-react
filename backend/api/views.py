@@ -42,7 +42,7 @@ class CustomUserViewSet(UserViewSet):
         pagination_class=CustomPagination
     )
     def subscriptions(self, request, *args, **kwargs):
-        queryset = User.objects.filter(following__user=request.user)
+        queryset = User.objects.filter(follower__user=request.user)
         page = self.paginate_queryset(queryset)
         serializer = SubscriptionSerializer(
             page, many=True, context={'request': request})
