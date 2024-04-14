@@ -48,6 +48,7 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 class RecipeIngredientSerializer(serializers.ModelSerializer):
+    id = serializers.ReadOnlyField(source='ingredient.id')
     name = serializers.ReadOnlyField(
         source='ingredient.name'
     )
@@ -183,7 +184,8 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
         fields = (
-            'tags', 'ingredients', 'name', 'image', 'text', 'cooking_time'
+            'tags', 'ingredients', 'name',
+            'image', 'text', 'cooking_time'
         )
 
     def to_representation(self, instance):
