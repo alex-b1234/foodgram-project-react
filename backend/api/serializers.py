@@ -1,4 +1,4 @@
-from djoser.serializers import UserSerializer, UserCreateSerializer
+from djoser.serializers import UserSerializer
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
@@ -10,13 +10,13 @@ User = get_user_model()
 DEFAULT_PAGE_SIZE = 10
 
 
-class CustomUserSerializer(UserCreateSerializer):
+class CustomUserSerializer(UserSerializer):
     is_subscribed = serializers.SerializerMethodField(read_only=True)
 
     class Meta(UserSerializer.Meta):
         model = User
-        fields = ('id', 'email', 'last_name', 'is_subscribed',
-                  'first_name', 'username', 'password',)
+        fields = ('id', 'email', 'username', 'is_subscribed',
+                  'first_name', 'last_name', 'password',)
         extra_kwargs = {
             'password': {'write_only': True},
             'is_subscribed': {'read_only': True}
