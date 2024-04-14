@@ -14,7 +14,7 @@ class CustomUserSerializer(UserSerializer):
     is_subscribed = serializers.SerializerMethodField(read_only=True)
 
     class Meta(UserSerializer.Meta):
-        #model = User
+        model = User
         fields = ('id', 'email', 'last_name', 'is_subscribed',
                   'first_name', 'username', 'password',)
         extra_kwargs = {
@@ -30,7 +30,7 @@ class CustomUserSerializer(UserSerializer):
             user=request.user, following=obj.id).exists()
 
     def create(self, validated_data):
-        return User.objects.create_user(**validated_data)
+        return User.objects.create(**validated_data)
 
 
 class IngredientSerializer(serializers.ModelSerializer):
