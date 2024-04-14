@@ -129,7 +129,7 @@ class SubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('email', 'id', 'username', 'first_name', 'last_name',
-                  'is_subscribed', 'recipes', 'recipes_count')
+                  'recipes', 'recipes_count')
 
     def get_recipes(self, obj):
         recipes_limit = self.context.get('request').query_params.get(
