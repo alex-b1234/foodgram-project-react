@@ -89,7 +89,7 @@ class RecipeSerializer(serializers.ModelSerializer):
             recipe=obj, user=request.user).exists()
 
 
-class SubRecipeSerializer:
+class SubRecipeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recipe
@@ -135,11 +135,7 @@ class SubscriptionSerializer(CustomUserSerializer):
         recipes_limit = self.context.get('request').query_params.get(
             'recipes_limit', DEFAULT_PAGE_SIZE)
         recipes = obj.recipes.all()[:int(recipes_limit)]
-        return SubRecipeSerializer(
-            instance=recipes,
-            many=True,
-            context={'request': self.context.get('request')}
-        ).data
+        return SubRecipeSerializer(recipes, many=True).data
 
     def get_recipes_count(self, obj):
         return obj.recipes.all().count()
