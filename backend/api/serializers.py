@@ -135,8 +135,11 @@ class SubscriptionSerializer(CustomUserSerializer):
         recipes_limit = self.context.get('request').query_params.get(
             'recipes_limit', DEFAULT_PAGE_SIZE)
         recipes = obj.recipes.all()[:int(recipes_limit)]
-        serializer = SubRecipeSerializer(data=recipes, many=True)
-        return serializer.data
+        return SubRecipeSerializer(
+            instance=recipes,
+            many=True,
+            context={'request': self.context.get('request')}
+        ).data
 
     def get_recipes_count(self, obj):
         return obj.recipes.all().count()
