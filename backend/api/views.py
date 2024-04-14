@@ -35,6 +35,10 @@ class CustomUserViewSet(UserViewSet):
     pagination_class = CustomPagination
     serializer_class = CustomUserSerializer
 
+    @action(methods=['get'], detail=False)
+    def me(self, request, *args, **kwargs):
+        return super().me(request, *args, **kwargs)
+
     @action(
         methods=('get',),
         detail=False,
@@ -88,7 +92,7 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     filterset_class = IngredientFilter
 
 
-class SubscribtionViewSet(viewsets.GenericViewSet, mixins.ListModelMixin,
+'''class SubscribtionViewSet(viewsets.GenericViewSet, mixins.ListModelMixin,
                           mixins.CreateModelMixin,):
     serializer_class = SubscriptionSerializer
     permission_classes = (permissions.IsAuthenticated,)
@@ -99,7 +103,7 @@ class SubscribtionViewSet(viewsets.GenericViewSet, mixins.ListModelMixin,
         return Follow.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        serializer.save(user=self.request.user)'''
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
