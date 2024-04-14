@@ -1,4 +1,4 @@
-from rest_framework import viewsets, mixins, permissions, filters, status
+from rest_framework import viewsets, status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated, SAFE_METHODS
 from rest_framework.decorators import action
@@ -32,7 +32,7 @@ class CustomPagination(PageNumberPagination):
 
 class CustomUserViewSet(UserViewSet):
     http_method_names = ('get', 'post', 'delete',)
-    queryset = User.objects.all()
+    #queryset = User.objects.all()
     pagination_class = CustomPagination
     #serializer_class = CustomUserSerializer
 
@@ -90,20 +90,6 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = IngredientSerializer
     filter_backends = (DjangoFilterBackend,)
     filterset_class = IngredientFilter
-
-
-class SubscribtionViewSet(viewsets.GenericViewSet, mixins.ListModelMixin,
-                          mixins.CreateModelMixin,):
-    serializer_class = SubscriptionSerializer
-    permission_classes = (permissions.IsAuthenticated,)
-    filter_backends = (filters.SearchFilter,)
-    search_fields = ('subscribing__username',)
-
-    def get_queryset(self):
-        return Follow.objects.filter(user=self.request.user)
-
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
 
 
 class RecipeViewSet(viewsets.ModelViewSet):

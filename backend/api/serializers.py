@@ -13,7 +13,7 @@ DEFAULT_PAGE_SIZE = 10
 class CustomUserSerializer(UserSerializer):
     is_subscribed = serializers.SerializerMethodField(read_only=True)
 
-    class Meta(UserSerializer.Meta):
+    class Meta:
         model = User
         fields = ('id', 'email', 'username', 'is_subscribed',
                   'first_name', 'last_name', 'password',)
