@@ -174,11 +174,13 @@ class RecipeViewSet(viewsets.ModelViewSet):
             ).annotate(cart_amount=Sum('amount')).order_by('-amount')
         )
         shopping_list = ''
-        for num, item in enumerate(cart_ingredients):
+        num = 0
+        for item in cart_ingredients:
+            num += 1
             name = item['ingredient__name']
             measurement_unit = item['ingredient__measurement_unit']
             amount = item['cart_amount']
-            shopping_list += (f'{num + 1}. {name} - '
+            shopping_list += (f'{num}. {name} - '
                               f'{amount} {measurement_unit} \n')
         filename = 'shopping_list.txt'
         response = HttpResponse(shopping_list,
