@@ -52,7 +52,7 @@ class CustomUserViewSet(UserViewSet):
         permission_classes=(IsAuthenticated,),
         pagination_class=CustomPagination
     )
-    def subscribe(self, request, *args, **kwargs):
+    def subscribe(self, request, *args, **kwargs, obj):
         followed_user = get_object_or_404(User, pk=self.kwargs.get('id'))
         serializer = FollowSerializer(
             data={'user': request.user.id, 'following': followed_user.id},
@@ -62,7 +62,9 @@ class CustomUserViewSet(UserViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        try:
+        '''if Follow.objects.filter(user=request.user, following=obj.id).exists():
+            subscription.delete()'''
+        '''try:
             subscription = get_object_or_404(
                 Follow, user=request.user, following=followed_user)
         except Http404:
@@ -71,7 +73,7 @@ class CustomUserViewSet(UserViewSet):
         return Response(
             f'Вы отписались от {followed_user}',
             status=status.HTTP_204_NO_CONTENT
-        )
+        )'''
 
     def perform_create(self, serializer):
         serializer.save()
@@ -160,9 +162,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
         )
 
     @action(
-        methods=['get'],
+        methods=('get',),
         detail=False,
-        permission_classes=[IsAuthenticated]
+        permission_classes=(IsAuthenticated,)
     )
     def download_shopping_cart(self, request):
         cart_ingredients = (
@@ -185,6 +187,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         filename = 'shopping_list.txt'
         response = HttpResponse(
             shopping_list,
-            content_type='text/plain,charset=utf8')
+            content_type='text/plain,charset=utf8'
+        )
         response['Content-Disposition'] = f'attachment; filename={filename}'
         return response
