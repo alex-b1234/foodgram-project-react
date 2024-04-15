@@ -62,7 +62,7 @@ class CustomUserViewSet(UserViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        '''try:
+        try:
             subscription = get_object_or_404(
                 Follow, user=request.user, following=followed_user)
         except Http404:
@@ -71,7 +71,7 @@ class CustomUserViewSet(UserViewSet):
         return Response(
             f'Вы отписались от {followed_user}',
             status=status.HTTP_204_NO_CONTENT
-        )'''
+        )
 
     def perform_create(self, serializer):
         serializer.save()
