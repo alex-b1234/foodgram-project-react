@@ -11,23 +11,21 @@ DEFAULT_PAGE_SIZE = 10
 
 
 class CustomUserSerializer(UserSerializer):
-    is_subscribed = serializers.SerializerMethodField(read_only=True)
+    is_subscribed = serializers.SerializerMethodField()
 
     class Meta:
         model = User
         fields = ('id', 'email', 'username', 'is_subscribed',
                   'first_name', 'last_name', 'password',)
-        extra_kwargs = {
-            'password': {'write_only': True},
-            'is_subscribed': {'read_only': True}
-        }
 
     def get_is_subscribed(self, obj):
         request = self.context.get('request')
-        if request.user.is_anonymous:
-            return False
-        return Follow.objects.filter(
-            user=request.user, following=obj.id).exists()
+        #if request.user.is_anonymous:
+        #    return False
+        #return Follow.objects.filter(
+        #    user=request.user, following=obj.id).exists()
+        user = request.user
+        return user.objects.filter(follower__following=obj.id).exists
 
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
