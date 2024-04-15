@@ -52,7 +52,7 @@ class CustomUserViewSet(UserViewSet):
         permission_classes=(IsAuthenticated,),
         pagination_class=CustomPagination
     )
-    def subscribe(self, request, *args, **kwargs, obj):
+    def subscribe(self, request, *args, **kwargs):
         followed_user = get_object_or_404(User, pk=self.kwargs.get('id'))
         serializer = FollowSerializer(
             data={'user': request.user.id, 'following': followed_user.id},
@@ -62,7 +62,7 @@ class CustomUserViewSet(UserViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        try:
+        '''try:
             subscription = get_object_or_404(
                 Follow, user=request.user, following=followed_user)
         except Http404:
@@ -71,7 +71,7 @@ class CustomUserViewSet(UserViewSet):
         return Response(
             f'Вы отписались от {followed_user}',
             status=status.HTTP_204_NO_CONTENT
-        )
+        )'''
 
     def perform_create(self, serializer):
         serializer.save()
