@@ -47,9 +47,9 @@ class CustomUserViewSet(UserViewSet):
         return self.get_paginated_response(serializer.data)
 
     @action(
-        methods=['post', 'delete'],
+        methods=('post', 'delete'),
         detail=True,
-        permission_classes=[IsAuthenticated],
+        permission_classes=(IsAuthenticated,),
         pagination_class=CustomPagination
     )
     def subscribe(self, request, *args, **kwargs):
@@ -107,7 +107,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         return CreateRecipeSerializer
 
     @action(
-        methods=['post', 'delete'],
+        methods=('post', 'delete'),
         detail=True,
         permission_classes=[IsAuthenticated]
     )
@@ -133,9 +133,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
         )
 
     @action(
-        methods=['post', 'delete'],
+        methods=('post', 'delete'),
         detail=True,
-        permission_classes=[IsAuthenticated]
+        permission_classes=(IsAuthenticated,)
     )
     def shopping_cart(self, request, *args, **kwargs):
         recipe = get_object_or_404(Recipe, id=self.kwargs.get('pk'))

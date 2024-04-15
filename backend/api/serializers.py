@@ -24,8 +24,8 @@ class CustomUserSerializer(UserSerializer):
         #    return False
         #return Follow.objects.filter(
         #    user=request.user, following=obj.id).exists()
-        user = request.user
-        return user.objects.filter(follower__following=obj.id).exists
+        return Follow.objects.filter(follower__user=request.user,
+                                     following__following=obj.id).exists
 
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
