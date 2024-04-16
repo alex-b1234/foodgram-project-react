@@ -165,24 +165,26 @@ class RecipeViewSet(viewsets.ModelViewSet):
         permission_classes=(IsAuthenticated,)
     )
     def download_shopping_cart(self, request):
+        cart_ingredients_filter = (
+            RecipeIngredient.objects.filter(
+                recipe__cart__user=request.user
+            )
+        )
         cart_ingredients = (
-            # .filter(
-            #    recipe__cart__user=request.user
-            #)
-            RecipeIngredient.objects.values(
+            cart_ingredients_filter.objects.values(
                 'ingredient__name',
-            #    'ingredient__measurement_unit'
-            ).annotate(cart_amount=Sum('amount'))#.order_by('-amount')
+                'ingredient__measurement_unit'
+            ).annotate(cart_amount=Sum('amount')).order_by('-amount')
         )
         shopping_list = ''
         num = 0
         for item in cart_ingredients:
             num += 1
             name = item['ingredient__name']
-         #   measurement_unit = item['ingredient__measurement_unit']
+            measurement_unit = item['ingredient__measurement_unit']
             amount = item['cart_amount']
             shopping_list += (f'{num}. {name} - '
-                              f'{amount} measurement_unit \n')
+                              f'{amount} {measurement_unit} \n')
         filename = 'shopping_list.txt'
         response = HttpResponse(
             shopping_list,
