@@ -174,7 +174,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             RecipeIngredient.objects.values(
                 'ingredient__name',
             #    'ingredient__measurement_unit'
-            ).annotate(cart_amount=Sum('amount')).order_by('-amount')
+            ).annotate(cart_amount=Sum('amount'))#.order_by('-amount')
         )
         shopping_list = ''
         num = 0
