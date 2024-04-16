@@ -154,7 +154,6 @@ class RecipeIngredient(models.Model):
         validators=[MinValueValidator(1)])
 
     class Meta:
-        ordering = ['-amount']
         verbose_name = 'Ингредиент в рецепте'
         verbose_name_plural = 'Ингредиенты в рецептах'
         constraints = [
