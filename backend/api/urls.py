@@ -1,4 +1,3 @@
-from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 from .views import (RecipeViewSet, TagViewSet,
@@ -11,7 +10,6 @@ router.register('recipes', RecipeViewSet, basename='recipes')
 router.register('ingredients', IngredientViewSet, basename='ingredients')
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('auth/', include('djoser.urls.authtoken')),
     path('', include(router.urls)),
 ]

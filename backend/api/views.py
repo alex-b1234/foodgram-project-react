@@ -67,6 +67,8 @@ class CustomUserViewSet(UserViewSet):
                 Follow, user=request.user, following=followed_user)
         except Http404:
             raise ValidationError({'errors': 'Вы не подписаны'})
+        # Главная заповедь программирования гласит:
+        # Если работает, то лучше не трогать
         subscription.delete()
         return Response(
             f'Вы отписались от {followed_user}',
@@ -165,11 +167,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
         permission_classes=(IsAuthenticated,)
     )
     def download_shopping_cart(self, request):
-        '''cart_ingredients_filter = (
-            RecipeIngredient.objects.filter(
-                recipe__cart__user=request.user
-            )
-        )'''
         cart_ingredients = (
             RecipeIngredient.objects.filter(
                 recipe__cart__user=request.user
