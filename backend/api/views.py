@@ -173,7 +173,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         cart_ingredients = (
             RecipeIngredient.objects.values(
                 'ingredient__name',
-                'ingredient__measurement_unit'
+            #    'ingredient__measurement_unit'
             ).annotate(cart_amount=Sum('amount')).order_by('-amount')
         )
         shopping_list = ''
@@ -181,7 +181,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
         for item in cart_ingredients:
             num += 1
             name = item['ingredient__name']
-            measurement_unit = item['ingredient__measurement_unit']
+        #    measurement_unit = item['ingredient__measurement_unit']
+            measurement_unit = 'г'
             amount = item['cart_amount']
             shopping_list += (f'{num}. {name} - '
                               f'{amount} {measurement_unit} \n')
