@@ -22,6 +22,10 @@ class CustomUserSerializer(UserSerializer):
         request = self.context.get('request')
         if request.user.is_anonymous:
             return False
+        # Здесь нужно только проверить, существует ли в таблице Follow
+        # запись, в которой user это тот кто делает запрос, а в following
+        # тот, чью страницу он запрашивает, не думаю что тут стоит использовать
+        # имена связанных моделей
         return Follow.objects.filter(
             user=request.user, following=obj.id).exists()
 
@@ -82,6 +86,7 @@ class RecipeSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         if not request or request.user.is_anonymous:
             return False
+        # Здесь аналогично с ситуацией выше
         return Cart.objects.filter(
             recipe=obj, user=request.user).exists()
 

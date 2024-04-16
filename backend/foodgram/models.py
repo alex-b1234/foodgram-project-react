@@ -154,6 +154,7 @@ class RecipeIngredient(models.Model):
         validators=[MinValueValidator(1)])
 
     class Meta:
+        ordering = ['-amount']
         verbose_name = 'Ингредиент в рецепте'
         verbose_name_plural = 'Ингредиенты в рецептах'
         constraints = [
@@ -218,7 +219,7 @@ class Follow(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name='following',
-        verbose_name='Тот на кого подписываются'
+        verbose_name='Тот, на кого подписываются'
         # Я не знал как назвать это одним словом
     )
 
