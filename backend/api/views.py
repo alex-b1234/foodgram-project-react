@@ -166,12 +166,13 @@ class RecipeViewSet(viewsets.ModelViewSet):
     )
     def download_shopping_cart(self, request):
         cart_ingredients = (
-            RecipeIngredient.objects.filter(
-                recipe__cart__user=request.user
-            ).values(
+            # .filter(
+            #    recipe__cart__user=request.user
+            #)
+            RecipeIngredient.objects.values(
                 'ingredient__name',
             #    'ingredient__measurement_unit'
-            ).annotate(cart_amount=Sum('amount')).order_by('-amount')
+            ).annotate(cart_amount=Sum('amount'))#.order_by('-amount')
         )
         shopping_list = ''
         num = 0
