@@ -72,6 +72,13 @@ class CustomUserViewSet(UserViewSet):
         #    f'Вы отписались от {followed_user}',
         #    status=status.HTTP_204_NO_CONTENT
         #)
+        if serializer.is_valid():
+            subscription = Follow.objects.get(
+                user=request.user, following=followed_user
+            )
+            subscription.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def perform_create(self, serializer):
         serializer.save()
