@@ -218,8 +218,8 @@ class Follow(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name='following',
-        verbose_name='Тот, на кого подписываются'
         # Я не знал как назвать это одним словом
+        verbose_name='Тот, на кого подписываются'
     )
 
     class Meta:
