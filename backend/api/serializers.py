@@ -155,7 +155,7 @@ class FollowSerializer(serializers.ModelSerializer):
                 {'errors': 'Вы не можете подписаться на себя.'})
         if request.method == 'DELETE':
             if not request.user.follower.filter(
-                following=data.following
+                following=data.get('following')
             ).exists():
                 raise serializers.ValidationError('Вы не подписаны.')
         return data
