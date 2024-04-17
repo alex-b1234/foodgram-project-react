@@ -158,7 +158,7 @@ class FollowSerializer(serializers.ModelSerializer):
                     message=('Вы уже подписаны')
                 ),
             )
-        return None
+        return ()
 
     def validate(self, data):
         request = self.context.get('request')
