@@ -26,8 +26,9 @@ class CustomUserSerializer(UserSerializer):
         # запись, в которой user это тот кто делает запрос, а в following
         # тот, чью страницу он запрашивает, не думаю что тут стоит использовать
         # имена связанных моделей
-        return Follow.objects.filter(
-            user=request.user, following=obj.id).exists()
+        #return Follow.objects.filter(
+        #    user=request.user, following=obj.id).exists()
+        return request.user.follower.filter(following=obj.id).exists()
 
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
