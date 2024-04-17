@@ -129,16 +129,24 @@ class RecipeViewSet(viewsets.ModelViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        try:
-            favorite = get_object_or_404(
-                Favorite, user=request.user, recipe=recipe)
-        except Http404:
-            raise ValidationError({'errors': 'Рецепта нет в избранном'})
-        favorite.delete()
-        return Response(
-            'Рецепт удален из избранного',
-            status=status.HTTP_204_NO_CONTENT
-        )
+        #try:
+        #    favorite = get_object_or_404(
+        #        Favorite, user=request.user, recipe=recipe)
+        #except Http404:
+        #    raise ValidationError({'errors': 'Рецепта нет в избранном'})
+        #favorite.delete()
+        #return Response(
+        #    'Рецепт удален из избранного',
+        #    status=status.HTTP_204_NO_CONTENT
+        #)
+        if serializer.is_valid():
+            #subscription = Follow.objects.get(
+            #    user=request.user, following=followed_user
+            #)
+            favorite = request.user.favorites.filter(recipe=recipe)
+            favorite.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @action(
         methods=('post', 'delete'),
@@ -155,17 +163,25 @@ class RecipeViewSet(viewsets.ModelViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        try:
-            favorite = get_object_or_404(
-                Cart, user=request.user, recipe=recipe)
-        except Http404:
-            raise ValidationError(
-                {'errors': 'Рецепта нет в списке покупок'})
-        favorite.delete()
-        return Response(
-            'Рецепт удален из списка покупок',
-            status=status.HTTP_204_NO_CONTENT
-        )
+        #try:
+        #    favorite = get_object_or_404(
+        #        Cart, user=request.user, recipe=recipe)
+        #except Http404:
+        #    raise ValidationError(
+        #        {'errors': 'Рецепта нет в списке покупок'})
+        #favorite.delete()
+        #return Response(
+        #    'Рецепт удален из списка покупок',
+        #    status=status.HTTP_204_NO_CONTENT
+        #)
+        if serializer.is_valid():
+            #subscription = Follow.objects.get(
+            #    user=request.user, following=followed_user
+            #)
+            cart = request.user.cart.filter(recipe=recipe)
+            cart.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @action(
         methods=('get',),

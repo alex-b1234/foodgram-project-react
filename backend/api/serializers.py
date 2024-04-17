@@ -115,6 +115,15 @@ class CartSerializer(serializers.ModelSerializer):
             context={'request': self.context.get('request')}
         ).data
 
+    def validate(self, data):
+        request = self.context.get('request')
+        if request.method == 'DELETE':
+            if not request.user.favorites.filter(
+                recipe=data.get('recipe')
+            ).exists():
+                raise serializers.ValidationError('Нет в корзине.')
+        return data
+
 
 class SubscriptionSerializer(CustomUserSerializer):
     recipes = serializers.SerializerMethodField()
