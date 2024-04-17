@@ -5,7 +5,7 @@ from .models import (Tag, Recipe, Ingredient, Cart, Favorite, Follow,
 
 
 class RecipeAdmin(admin.ModelAdmin):
-    list_display = ('name', 'author')
+    list_display = ('name', 'author', 'favorite_count')
     list_filter = ('author', 'name', 'tags')
 
     def favorite_count(self, obj):
