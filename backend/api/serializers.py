@@ -148,13 +148,15 @@ class FollowSerializer(serializers.ModelSerializer):
         #    ),
         #)
 
-    def validate(self, data, obj):
+    def validate(self, data):
         request = self.context.get('request')
         if data.get('user') == data.get('following'):
             raise serializers.ValidationError(
                 {'errors': 'Вы не можете подписаться на себя.'})
         if request.method == 'DELETE':
-            if not request.user.follower.filter(following=obj.id).exists():
+            if not request.user.follower.filter(
+                following=data.following
+            ).exists():
                 raise serializers.ValidationError('Вы не подписаны.')
         return data
 
