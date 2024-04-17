@@ -159,17 +159,13 @@ class FollowSerializer(serializers.ModelSerializer):
             ).exists():
                 raise serializers.ValidationError('Вы не подписаны.')
         if request.method == 'POST':
-            validators = (
-                serializers.UniqueTogetherValidator(
-                    queryset=Follow.objects.all(),
-                    fields=('user', 'following'),
-                    message=('Вы уже подписаны')
-                ),
+            validator = serializers.UniqueTogetherValidator(
+                queryset=Follow.objects.all(),
+                fields=('user', 'following'),
+                message=('Вы уже подписаны')
             )
-            for validator in validators:
-                validator.set_context(self)
-                validator.set_context_name('serializer')
-                validator(data)
+            validator.set_context({'serializer': self})
+            validator(data)
         return data
 
     def to_representation(self, instance):
