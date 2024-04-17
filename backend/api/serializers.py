@@ -148,6 +148,18 @@ class FollowSerializer(serializers.ModelSerializer):
         #    ),
         #)
 
+    def get_validators(self):
+        request = self.context.get('request')
+        if request.method == 'POST':
+            return (
+                serializers.UniqueTogetherValidator(
+                    queryset=Follow.objects.all(),
+                    fields=('user', 'following'),
+                    message=('Вы уже подписаны')
+                ),
+            )
+        return None
+
     def validate(self, data):
         request = self.context.get('request')
         if data.get('user') == data.get('following'):
