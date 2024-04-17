@@ -19,7 +19,7 @@ password: adminadmin
 
 ## Запросы к api
 Регистрация:\
-POST /api/users/
+<b>POST</b> /api/users/
 ```
 {
     "email": "vpupkin@yandex.ru",
@@ -31,10 +31,10 @@ POST /api/users/
 ```
 
 Список рецептов:\
-GET /api/recipes/
+<b>GET</b> /api/recipes/
 
 Создание рецептов:\
-POST /api/recipes/
+<b>POST</b> /api/recipes/
 ```
 {
 
