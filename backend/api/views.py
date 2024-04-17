@@ -3,22 +3,20 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated, SAFE_METHODS
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.serializers import ValidationError
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
-from django.http import Http404, HttpResponse
+from django.http import HttpResponse
 from django.db.models import Sum
 from djoser.views import UserViewSet
 from django.contrib.auth import get_user_model
 
 from .permissions import IsAuthorOrReadOnly
 from .filters import IngredientFilter, RecipeFilter
-from foodgram.models import (Recipe, Follow, Tag, Ingredient, RecipeIngredient,
-                             Favorite, Cart)
+from foodgram.models import (Recipe, Tag, Ingredient, RecipeIngredient)
 from .serializers import (SubscriptionSerializer, TagSerializer,
                           IngredientSerializer, FollowSerializer,
                           RecipeSerializer, CreateRecipeSerializer,
-                          FavoriteSerializer, CartSerializer,)
+                          FavoriteSerializer, CartSerializer)
 
 User = get_user_model()
 DEFAULT_PAGE_SIZE = 10
@@ -62,21 +60,10 @@ class CustomUserViewSet(UserViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        #try:
-        #    subscription = get_object_or_404(
-        #        Follow, user=request.user, following=followed_user)
-        #except Http404:
-        #    raise ValidationError({'errors': 'Вы не подписаны'})
-        #subscription.delete()
-        #return Response(
-        #    f'Вы отписались от {followed_user}',
-        #    status=status.HTTP_204_NO_CONTENT
-        #)
         if serializer.is_valid():
-            #subscription = Follow.objects.get(
-            #    user=request.user, following=followed_user
-            #)
-            subscription = request.user.follower.filter(following=followed_user)
+            subscription = request.user.follower.filter(
+                following=followed_user
+            )
             subscription.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -129,20 +116,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        #try:
-        #    favorite = get_object_or_404(
-        #        Favorite, user=request.user, recipe=recipe)
-        #except Http404:
-        #    raise ValidationError({'errors': 'Рецепта нет в избранном'})
-        #favorite.delete()
-        #return Response(
-        #    'Рецепт удален из избранного',
-        #    status=status.HTTP_204_NO_CONTENT
-        #)
         if serializer.is_valid():
-            #subscription = Follow.objects.get(
-            #    user=request.user, following=followed_user
-            #)
             favorite = request.user.favorites.filter(recipe=recipe)
             favorite.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
@@ -163,21 +137,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        #try:
-        #    favorite = get_object_or_404(
-        #        Cart, user=request.user, recipe=recipe)
-        #except Http404:
-        #    raise ValidationError(
-        #        {'errors': 'Рецепта нет в списке покупок'})
-        #favorite.delete()
-        #return Response(
-        #    'Рецепт удален из списка покупок',
-        #    status=status.HTTP_204_NO_CONTENT
-        #)
         if serializer.is_valid():
-            #subscription = Follow.objects.get(
-            #    user=request.user, following=followed_user
-            #)
             cart = request.user.cart.filter(recipe=recipe)
             cart.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
