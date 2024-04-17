@@ -140,13 +140,13 @@ class FollowSerializer(serializers.ModelSerializer):
     class Meta:
         model = Follow
         fields = ('user', 'following')
-        validators = (
-            serializers.UniqueTogetherValidator(
-                queryset=Follow.objects.all(),
-                fields=('user', 'following'),
-                message=('Вы уже подписаны')
-            ),
-        )
+        #validators = (
+        #    serializers.UniqueTogetherValidator(
+        #        queryset=Follow.objects.all(),
+        #        fields=('user', 'following'),
+        #        message=('Вы уже подписаны')
+        #    ),
+        #)
 
     def validate(self, data, obj):
         request = self.context.get('request')
