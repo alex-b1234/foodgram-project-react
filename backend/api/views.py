@@ -62,18 +62,16 @@ class CustomUserViewSet(UserViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        try:
-            subscription = get_object_or_404(
-                Follow, user=request.user, following=followed_user)
-        except Http404:
-            raise ValidationError({'errors': 'Вы не подписаны'})
-        # Главная заповедь программирования гласит:
-        # Если работает, то лучше не трогать
-        subscription.delete()
-        return Response(
-            f'Вы отписались от {followed_user}',
-            status=status.HTTP_204_NO_CONTENT
-        )
+        #try:
+        #    subscription = get_object_or_404(
+        #        Follow, user=request.user, following=followed_user)
+        #except Http404:
+        #    raise ValidationError({'errors': 'Вы не подписаны'})
+        #subscription.delete()
+        #return Response(
+        #    f'Вы отписались от {followed_user}',
+        #    status=status.HTTP_204_NO_CONTENT
+        #)
 
     def perform_create(self, serializer):
         serializer.save()
